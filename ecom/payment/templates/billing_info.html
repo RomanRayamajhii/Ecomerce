@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Billing Info</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    </head>
+    <body>
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Billing Info</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Billing Info Here....</p>
+                </div>
+            </div>
+        </header>
+        <br><br><hr>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Order 
+                        </div>
+                        <div class="card-body">
+                            {% for product in cart_products %}
+                                {{ product.name }}
+                                {% if product.is_sale %}
+                                    ${{ product.sale_price }}
+                                {% else %}
+                                    ${{ product.price }}
+                    
+                    
+
+                                {% endif %}
+                                <br>
+                            <small> Quantity:
+                                {% for key,value in quantities.items %}
+                                    {% if key == product.id|slugify %}
+                                        {{ value }}
+                                    {% endif %}
+                                {% endfor %} </small>
+                                <br><br>
+                                {% endfor %}
+                            <h3>Total: ${{totals}}</h3>
+                            <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary " >Update Items</a>
+                        </div>
+                    </div> 
+                    <br><br>    
+               <div class="card">
+            <div class="card-header">
+                Shipping Info
+            </div>
+            <div class="card-body">
+                    <p>Full Name: {{ Shipping_info.shippingfull_name }}</p>
+                    <p>Email Address: {{ Shipping_info.shipping_EmailAddress }}</p>
+                    <p>Phone Number: {{ Shipping_info.shipping_phonenumber }}</p>
+                    <p>Country: {{ Shipping_info.shipping_country }}</p>
+                    <p>State: {{ Shipping_info.shipping_state }}</p>
+                    <p>District: {{ Shipping_info.shipping_district }}</p>
+                    <p>City: {{ Shipping_info.shipping_city }}</p>
+                    <p>Zip Code: {{ Shipping_info.shipping_zipCode }}</p>
+
+                    <br>
+                    <a href="{% url 'update_info' %}" class="btn btn-outline-secondary">Update Shipping Address</a>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                Payment Info
+            </div>
+            <div class="card-body">
+                <form action="{% url 'process_order' %}" method="post">
+                    {% csrf_token %}
+                {{billing_form.as_p}}
+                </div> <br>
+                </div><br>
+            <button type="submit" class="btn btn-secondary">Pay Now</button>
+        </form>
+                    
+         </div>
+    </div>
+</div>
+
+
+    </div>
+        <!-- Section-->
+        <br><br><br>
+    </body>
+</html>
+{% endblock %}

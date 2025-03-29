@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="Product Image">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text">
+                        <small class="text-body-secondary">
+                            {% if product.is_sale %}
+                            <div class="d-flex bolder text-warning mb-2" style='font-size:20px; font-weight:bold'>⭐️ !!! SALE !!! ⭐️</div>
+                                <strike style='color:red'>${{ product.price }}</strike>
+                                ${{ product.sale_price }}
+                            {% else %}
+                                ${{ product.price }}
+                            {% endif %}
+                            <br>
+                            <div>
+                            Quantity: <select class="from-select" id="qty-cart">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <br>
+                        </small>
+                    </p>
+                    
+                    <button class="btn btn-secondary" type='button' value='{{ product.id }}' id='add-cart'>Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // check if button press
+    $(document).on('click', '#add-cart', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url "cart_add" %}',
+            data: {
+                product_id: $('#add-cart').val(),
+                product_qty:$('#qty-cart option:selected').text(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function(json) {
+                // $('#cart_quantity').text(json.qty);  
+                // Update the cart quantity in the DOM
+                console.log("Cart Updated: ", json.qty);
+                location.reload()// Disable the button
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ': ' + xhr.responseText);
+            }
+        });
+    });
+</script>
+<br><br><br><br><br><br><br><br><br><br>
+{% endblock %}
