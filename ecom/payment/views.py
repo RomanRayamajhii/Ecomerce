@@ -1,18 +1,60 @@
 from django.shortcuts import render
 from cart.cart import Cart
 from payment.forms import Shippingform,PaymentForm
-from payment.models import ShippingAddress,Order,OrderItem
+from payment.models import ShippingAddress
+from payment.models import Order, OrderItem
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from store.models import Profile,Product
+import datetime
 
-def not_shipped_dash(request):
+
+
+def orders(request, pk):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders=Order.objects.filter(shipped=False)
+        order = Order.objects.get(pk=pk)
+        order_items = OrderItem.objects.filter(order=pk)
         
-        return render(request, 'not_shipped.html', {})
+        if request.POST:
+            status=request.POST['shipping_status']
+            if status== 'true':
+                order=Order.objects.filter(pk=pk)
+                #update status
+                now = datetime.datetime.now()
+                order.update(shipped=True,date_shipped=now)
+            else:
+                order=Order.objects.filter(pk=pk)
+                #update status
+                
+                order.update(shipped=False)
+            messages.success(request, 'Order status updated successfully!')
+            return redirect('index')        
+                
+                
+            
+        return render(request, 'orders.html', {'order': order, 'order_items': order_items})
+    else:
+        messages.success(request, 'Access Denied')
+        return redirect('index')
+
+def unshipped_dash(request):
+    if request.user.is_authenticated and request.user.is_superuser:
+        orders = Order.objects.filter(shipped=False)
+        if request.POST:
+            num=request.POST['num']
+            status=request.POST['shipping_status']
+            
+            order=Order.objects.filter(pk=num)
+                #update status
+            now = datetime.datetime.now()
+            order.update(shipped=True,date_shipped=now)
+          
+            
+            messages.success(request, 'Order status updated successfully!')
+            return redirect('unshipped_dash')   
+        return render(request, 'unshipped_dash.html', {'orders': orders})
     else:
         messages.success(request, 'Access Denied')
         return redirect('index')
@@ -20,8 +62,21 @@ def not_shipped_dash(request):
 
 def shipped_dash(request):
     if request.user.is_authenticated and request.user.is_superuser:
-        orders=Order.objects.filter(shipped=True)
-        return render(request, 'shipped.html', {})
+        
+        orders = Order.objects.filter(shipped=True)
+        if request.POST:
+            num=request.POST['num']
+            status=request.POST['shipping_status']
+            order=Order.objects.filter(id=num)
+            
+                #update status
+            now = datetime.datetime.now()
+            order.update(shipped=False)
+          
+            
+            messages.success(request, 'Order status updated successfully!')
+            return redirect('shipped_dash')  
+        return render(request, 'shipped_dash.html', {'orders': orders})
     else:
         messages.success(request, 'Access Denied')
         return redirect('index')   
@@ -111,9 +166,13 @@ def process_order(request):
                     if int(key) == product.id:
                         create_order_item=OrderItem(order_id=order_id,product_id=product_id,user=user,quantity=value,price=price)
                         create_order_item.save()
+                        # delete our cart
             for key in list(request.session.keys()):
                 if key=="session_key":
                     del request.session[key]
+                    # delete our old cart
+                    current_user=Profile.objects.filter(user=request.user)
+                    current_user.update(old_cart=" ")
                          
                
                     
@@ -130,5 +189,4 @@ def process_order(request):
             return redirect('index')
     else:
         messages.success(request, 'You need to login first')
-        return redirect('index')    
-        
+        return redirect('index')

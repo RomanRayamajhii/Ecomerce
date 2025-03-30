@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+
+{% block content%}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Orders Items</title>
+    </head>
+    <body>
+      
+      
+        <div class="container">
+            <div class="row">
+                <center>
+                    <div class="col-8">
+                        <br><br>
+                        <div class="card">
+                            <h5 class="card-header">Order {{order.id}} - ${{order.amount_paid}}</h5>
+                            <div class="card-body">
+                            Full Name: {{order.full_name}}<br>  
+                            Email: {{order.email}}<br>
+                            Phone Number: {{order.phone_number}}<br>
+                            <pre>Shipping Address: {{order.shipping_address}}</pre>
+                            {% if order.shipped%}
+                            Date Shipped: {{order.date_shipped}}<br>
+
+                            {% else %}
+
+                            Date Ordered: {{order.date_ordered}}<br>
+                            {% endif %}
+                            {% if order.shipped %}
+                            {% endif %}
+                            <hr>
+                            <div>
+                                <h4>Items:</h4>
+                                
+                                    {% for item in order_items %}
+                                        {{item.product}} - {{item.quantity}} - ${{item.price}}<br>
+                                    {% endfor %}
+                                <br><br>
+                            </div>
+                                {% if not order.shipped %}
+                                    <form action="" method="POST">
+                                    {% csrf_token %}
+                                    
+                                    <input type="hidden" name="shipping_status" value="true">
+                                    <button type="submit" class="btn btn-success">Mark As Shipped</button>
+                                </form>
+                                    {% else %}
+                                        <form action="" method="POST">
+                                        {% csrf_token %}
+                                        
+                                        <input type="hidden" name="shipping_status" value="false">
+                                        <button type="submit" class="btn btn-danger">Mark As Not Shipped</button>
+                                    </form>
+                                    {% endif %}
+
+                              
+                              
+                            </div>
+                          </div>
+                       
+
+                         
+                        
+                      
+                       
+                        <br><br>
+                        
+                    </div>    
+                </center>
+            </div>
+            </div>    
+
+              
+
+
+           
+            
+
+    </body>
+</html>
+{% endblock %}
+
+  <!-- Add this line to check the queryset -->

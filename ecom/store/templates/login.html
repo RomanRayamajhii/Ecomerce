@@ -22,7 +22,7 @@
             <div class="container">
                 <div class="row justify-content-center">
            
-                <form method="POST" actions='{% url "login"%}'>
+                <form method="POST" action="{% url 'login' %}">
                     {% csrf_token %}
                     
                         <div class="mb-3">
@@ -38,7 +38,7 @@
                           <input type="checkbox" class="form-check-input" id="exampleCheck1">
                           <label class="form-check-label" for="exampleCheck1">Check me out</label>
                         </div>
-                        <button type="submit" class="btn btn-primary ">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                       </form>
             </div>
             </div>
