@@ -1,0 +1,2 @@
+web: gunicorn PROJECTNAME.wsgi --log--filepath
+web: python manage.py migrate && gunicorn store.wsgi
