@@ -29,8 +29,8 @@ SECRET_KEY = 'django-insecure-jl8sp*@7$7gt(y5uf^1!wuggia5o0f%jgm%yjzfltdwx%ud)#k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-CSRF_TRUSTED_ORIGINS = ['']
+ALLOWED_HOSTS = ['ecomerce-production-b9c4.up.railway.app','https://ecomerce-production-b9c4.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['ecomerce-production-b9c4.up.railway.app','https://ecomerce-production-b9c4.up.railway.app']
 
 DATABASE_URL = "postgresql://postgres:angfIgRIeYGZlSjTXpsZGIKqIsHtlFCN@centerbeam.proxy.rlwy.net:23746/railway"
 # Application definition
