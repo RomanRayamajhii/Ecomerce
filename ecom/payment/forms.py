@@ -8,7 +8,6 @@ class Shippingform(forms.ModelForm):
     shipping_country=forms.CharField(label="Country:",widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Country', 'class': 'form-control'}),required=True)
     shipping_state=forms.CharField(label="State:",widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'State', 'class': 'form-control'}),required=True)
     shipping_district=forms.CharField(label="District:",widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'District', 'class': 'form-control'}),required=True)
-    
     shipping_city=forms.CharField(label="City:",widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'city', 'class': 'form-control'}),required=True)
     shipping_zipCode=forms.CharField(label="Zip Code:",widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Zip Code', 'class': 'form-control'}),required=True)
     class Meta:

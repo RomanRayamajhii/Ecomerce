@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header class="bg-danger py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Payment Failed</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Something went wrong with your transaction.</p>
+        </div>
+    </div>
+</header>
+
+<div class="container p-5 text-center">
+    <div class="alert alert-danger">
+        We were unable to process your payment. Please check your details and try again.
+    </div>
+    <a href="{% url 'checkout' %}" class="btn btn-primary">Try Again</a>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">Return Home</a>
+</div>
+
+{% endblock %}

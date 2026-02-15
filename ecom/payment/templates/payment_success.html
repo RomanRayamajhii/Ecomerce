@@ -1,1 +1,19 @@
-<h1>Payment success</h1>
+{% extends "base.html" %}
+{% block content %}
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Payment Successful</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Thank you for your purchase!</p>
+        </div>
+    </div>
+</header>
+
+<div class="container p-5 text-center">
+    <div class="alert alert-success">Your order has been placed successfully. You will be redirected to the home page in 3 seconds.</div>
+    <meta http-equiv="refresh" content="3; url={% url 'index' %}">
+    <a href="{% url 'index' %}" class="btn btn-secondary">Click here if not redirected</a>
+</div>
+
+{% endblock %}

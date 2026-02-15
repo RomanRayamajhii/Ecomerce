@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from .import settings
 from django.conf.urls.static import static
+from paypal.standard.ipn import urls as paypal_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,8 @@ urlpatterns = [
     path('payment/',include('payment.urls')),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    path('paypal/', include(paypal_urls)),
+]
 # image upload

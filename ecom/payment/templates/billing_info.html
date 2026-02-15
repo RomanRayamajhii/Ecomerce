@@ -80,9 +80,13 @@
             </div>
         </div>
         <br>
+
+   <center>{{paypal_form.render}}</center>
+
+        <br>
         <div class="card">
             <div class="card-header">
-                Payment Info
+                Billing Info
             </div>
             <div class="card-body">
                 <form action="{% url 'process_order' %}" method="post">

@@ -9,7 +9,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from store.models import Profile,Product
 import datetime
-
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+import uuid # unique identifier for transactions
 
 
 def orders(request, pk):
@@ -85,6 +88,8 @@ def shipped_dash(request):
 
 def payment_success(request):
     return render(request,'payment_success.html',{})
+def payment_failed(request):
+    return render(request,'payment_failed.html',{})
 def checkout(request):
     cart = Cart(request)
     cart_products = cart.get_pords()
@@ -121,13 +126,29 @@ def billing_info(request):
         # create session for shipping info
         my_shipping=request.POST
         request.session['my_shipping']=my_shipping
+        # host
+        host = request.get_host()
+        # paypal payment form
+        paypal_dict = {
+            "business": settings.PAYPAL_RECEIVER_EMAIL,
+            "amount": totals,
+            "item_name": "Order from Ecom",
+            'no_shipping': 2,  # No shipping required
+            "invoice": str(uuid.uuid4()),  # Unique identifier for the transaction
+            "currency_code": "USD",
+            "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+            "return": request.build_absolute_uri(reverse('payment_success')),
+            "cancel_return": request.build_absolute_uri(reverse('payment_failed')),
+        }
+          # paypal form
+        paypal_form = PayPalPaymentsForm(initial=paypal_dict)  
         
         if request.user.is_authenticated:
             billing_form=PaymentForm(request.POST)
-            return render(request, 'billing_info.html', {'cart_products': cart_products,"quantities":quantities,"totals":totals,'Shipping_info':request.POST,'billing_form':billing_form})
+            return render(request, 'billing_info.html', {'paypal_form':paypal_form,'cart_products': cart_products,"quantities":quantities,"totals":totals,'Shipping_info':request.POST,'billing_form':billing_form})
         else:
             billing_form=PaymentForm(request.POST)
-            return render(request, 'billing_info.html', {'cart_products': cart_products,"quantities":quantities,"totals":totals,'Shipping_info':request.POST,'billing_form':billing_form})
+            return render(request, 'billing_info.html', {'paypal_form':paypal_form,'cart_products': cart_products,"quantities":quantities,"totals":totals,'Shipping_info':request.POST,'billing_form':billing_form})
             
             
         Shipping_form=request.POST
