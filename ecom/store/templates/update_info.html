@@ -1,44 +1,112 @@
 {% extends "base.html" %}
-
 {% block content %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Update User Info</title>
-    </head>
-    <body>
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Update User Info Here ..</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Update User Info...</p>
-                </div>
-            </div>
-        </header>
-        <br><br>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <br><br>
-                    <strong>Billing Information</strong>
-                    <br><br>
-                    <form method="POST" action='{% url "update_info" %}'>
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <br><br>
-                        <strong>Shipping Information</strong>
-                        <br><br>
-                        {{Shipping_form.as_p}}
-                        <br><br>
-                        <button type='submit' class="btn btn-secondary">Update Info</button>
 
-                    </form>
-                    <br><br>
-                  
-                </div>
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Shipping Information</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Manage your account settings</p>
+        </div>
+    </div>
+</header>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'update_user' %}" class="list-group-item list-group-item-action">
+                    Account Details
+                </a>
+                <a href="{% url 'update_password' %}" class="list-group-item list-group-item-action">Change Password</a>
+                <a href="{% url 'update_info' %}" class="list-group-item list-group-item-action active" aria-current="true">Shipping Information</a>
             </div>
         </div>
-        <br><br>
-    </body>
-</html>
+        <div class="col-md-9">
+        <form method="POST" action="{% url 'update_info' %}">
+        {% csrf_token %}
+            <div class="card shadow-lg mb-4">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4">Update Your Billing Information</h3>
+                        <div class="mb-3">
+                            {{ form.phone.label_tag }}
+                            {{ form.phone }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.district.label_tag }}
+                                {{ form.district }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.city.label_tag }}
+                                {{ form.city }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.state.label_tag }}
+                                {{ form.state }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.country.label_tag }}
+                                {{ form.country }}
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4">Update Your Shipping Information</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ Shipping_form.shippingfull_name.label_tag }}
+                                {{ Shipping_form.shippingfull_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ Shipping_form.shipping_EmailAddress.label_tag }}
+                                {{ Shipping_form.shipping_EmailAddress }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ Shipping_form.shipping_phonenumber.label_tag }}
+                            {{ Shipping_form.shipping_phonenumber }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ Shipping_form.shipping_country.label_tag }}
+                                {{ Shipping_form.shipping_country }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ Shipping_form.shipping_state.label_tag }}
+                                {{ Shipping_form.shipping_state }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ Shipping_form.shipping_district.label_tag }}
+                                {{ Shipping_form.shipping_district }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ Shipping_form.shipping_city.label_tag }}
+                                {{ Shipping_form.shipping_city }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                             {{ Shipping_form.shipping_zipCode.label_tag }}
+                             {{ Shipping_form.shipping_zipCode }}
+                        </div>
+                </div>
+            </div>
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Update Information</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

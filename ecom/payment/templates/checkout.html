@@ -1,92 +1,119 @@
 {% extends "base.html" %}
-
 {% load static %}
-{% block content %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Checkout</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    </head>
-    <body>
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Checkout</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Checkout Here....</p>
-                </div>
-            </div>
-        </header>
-        <br><br><hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-          <div class="card">
-            <div class="card-header">
-                Order Items
-            </div>
-            <div class="card-body">
-                {% for product in cart_products %}
-                    {{ product.name }}
-                    {% if product.is_sale %}
-                        ${{ product.sale_price }}
-                    {% else %}
-                        ${{ product.price }}
-                    
-                    
+{% block title %}Checkout - E-Commerce Store{% endblock %}
 
-                    {% endif %}
-                    <br>
-                   <small> Quantity:
-                    {% for key,value in quantities.items %}
-                    {% if key == product.id|slugify %}
-                        {{ value }}
-                        {% endif %}
-                {% endfor %} </small>
-                <br><br>
-                {% endfor %}
-                <h3>Total: ${{totals}}</h3>
-                <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary " >Update Items</a>
-            </div>
-                </div> 
-                <br><br>    
-               <div class="card">
-            <div class="card-header">
-                Shipping Info
+{% block content %}
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder"><i class="bi bi-check-circle me-3"></i>Checkout</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Complete your order</p>
+        </div>
+    </div>
+</header>
+
+<div class="container my-5">
+    <div class="row g-5">
+        <!-- Order Summary -->
+        <div class="col-lg-5 order-lg-2 mb-4">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-cart-check me-2"></i>Order Summary</h5>
                 </div>
-            <div class="card-body">
-                <form action="{% url 'billing_info' %}" method="POST">
-                    {% csrf_token %}
-                {{ Shipping_form.as_p }}
-                <br>
-                <button type="submit" class="btn btn-secondary">
-                    Continue To Billing
-                </button>
-            </form>
-                <br>
-             
+                <div class="card-body">
+                    <ul class="list-group list-group-flush mb-3">
+                        {% for product in cart_products %}
+                        <li class="list-group-item d-flex justify-content-between lh-sm">
+                            <div>
+                                <h6 class="my-0">{{ product.name }}</h6>
+                                <small class="text-muted">
+                                    Qty:
+                                    {% for key,value in quantities.items %}
+                                        {% if key == product.id|slugify %}
+                                            {{ value }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </small>
+                            </div>
+                            <span class="text-muted">
+                                {% if product.is_sale %}
+                                    ${{ product.sale_price }}
+                                {% else %}
+                                    ${{ product.price }}
+                                {% endif %}
+                            </span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <span class="fw-bold">Total</span>
+                            <strong class="text-primary">${{ totals }}</strong>
+                        </li>
+                    </ul>
+                    <a href="{% url 'cart_summary' %}" class="btn btn-outline-secondary btn-sm w-100">
+                        <i class="bi bi-cart me-2"></i>Update Cart
+                    </a>
+                </div>
             </div>
-          
         </div>
-       
-                    
-          </div>
-         
-          </div>
-          </div>
+        
+        <!-- Shipping Form -->
+        <div class="col-lg-7 order-lg-1">
+            <div class="card shadow-lg">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0"><i class="bi bi-truck me-2"></i>Shipping Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'billing_info' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ Shipping_form.shippingfull_name.label_tag }}
+                                {{ Shipping_form.shippingfull_name }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ Shipping_form.shipping_EmailAddress.label_tag }}
+                                {{ Shipping_form.shipping_EmailAddress }}
+                            </div>
+
+                            <div class="col-12">
+                                {{ Shipping_form.shipping_phonenumber.label_tag }}
+                                {{ Shipping_form.shipping_phonenumber }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ Shipping_form.shipping_country.label_tag }}
+                                {{ Shipping_form.shipping_country }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ Shipping_form.shipping_state.label_tag }}
+                                {{ Shipping_form.shipping_state }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ Shipping_form.shipping_district.label_tag }}
+                                {{ Shipping_form.shipping_district }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ Shipping_form.shipping_city.label_tag }}
+                                {{ Shipping_form.shipping_city }}
+                            </div>
+
+                            <div class="col-12">
+                                {{ Shipping_form.shipping_zipCode.label_tag }}
+                                {{ Shipping_form.shipping_zipCode }}
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <button class="btn btn-primary btn-lg w-100" type="submit">
+                            <i class="bi bi-arrow-right me-2"></i>Continue to Billing
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <!-- Section-->
-        <br><br><br>
-    </body>
-</html>
+    </div>
+</div>
+
 {% endblock %}

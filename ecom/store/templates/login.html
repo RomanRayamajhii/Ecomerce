@@ -1,48 +1,61 @@
 {% extends "base.html" %}
+{% block title %}Login - E-Commerce Store{% endblock %}
 
+{% block content %}
 
-{% block content%}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>About</title>
-    </head>
-    <body>
-      
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Login Here ..</h1>
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder"><i class="bi bi-box-arrow-in-right me-3"></i>Login</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Access your account</p>
+        </div>
+    </div>
+</header>
 
-                    <p class="lead fw-normal text-white-50 mb-0"></p>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-circle display-1 text-primary"></i>
+                    </div>
+                    <h3 class="card-title text-center mb-4 fw-bold">Welcome Back</h3>
+                    <form method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold">
+                                <i class="bi bi-person me-2"></i>Username
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-at"></i></span>
+                                <input type="text" class="form-control form-control-lg" name="username" placeholder="Enter your username" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold">
+                                <i class="bi bi-key me-2"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control form-control-lg" name="password" placeholder="Enter your password" required>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                            </button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Don't have an account? 
+                            <a href="{% url 'register' %}" class="text-decoration-none fw-bold">Sign up here</a>
+                        </p>
+                    </div>
                 </div>
             </div>
-            </header>
-            <br><br>
-            <div class="container">
-                <div class="row justify-content-center">
-           
-                <form method="POST" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                          <input type="text" class="form-control" name="username"  placeholder="Enter Username">
-                          
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                          <input type="password" class="form-control" name="password" placeholder="Password">
-                        </div>
-                        <div class="mb-3 form-check">
-                          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                      </form>
-            </div>
-            </div>
+        </div>
+    </div>
+</div>
 
-            <br><br>
-          
-            {%endblock%}
+{% endblock %}

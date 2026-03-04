@@ -1,36 +1,63 @@
 {% extends "base.html" %}
-
 {% block content %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Update User</title>
-    </head>
-    <body>
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Update profile Here ..</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Update Your Account...</p>
-                </div>
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Update Profile</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Manage your account settings</p>
+        </div>
+    </div>
+</header>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'update_user' %}" class="list-group-item list-group-item-action active" aria-current="true">
+                    Account Details
+                </a>
+                <a href="{% url 'update_password' %}" class="list-group-item list-group-item-action">Change Password</a>
+                <a href="{% url 'update_info' %}" class="list-group-item list-group-item-action">Shipping Information</a>
             </div>
-        </header>
-        <br><br>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    <form method="POST" action='{% url "update_user" %}'>
+        </div>
+        <div class="col-md-9">
+            <div class="card shadow-lg">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4">Update Your Account Details</h3>
+                    <form method="POST" action="{% url 'update_user' %}">
                         {% csrf_token %}
-                        {{ user_form.as_p }}
-                        <button type='submit' class="btn btn-secondary">Update profile</button>
-                     
+                        
+                        <div class="mb-3">
+                            {{ user_form.username.label_tag }}
+                            {{ user_form.username }}
+                            {{ user_form.username.help_text|safe }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ user_form.first_name.label_tag }}
+                                {{ user_form.first_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ user_form.last_name.label_tag }}
+                                {{ user_form.last_name }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ user_form.email.label_tag }}
+                            {{ user_form.email }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Update Account</button>
+                        </div>
                     </form>
-                    <br><br>
-                    <a href="{% url 'update_password'%}" class="btn btn-success">update password</a>
                 </div>
             </div>
         </div>
-        <br><br>
-    </body>
-</html>
+    </div>
+</div>
+
 {% endblock %}
